@@ -1,0 +1,78 @@
+Q1.
+class Solution {
+public:
+    string getSmallestString(string s) {
+        string min = s;
+        for (int i = 0; i < s.size() - 1; ++i) {
+            if ((s[i] % 2 == s[i + 1] % 2)) {
+                swap(s[i], s[i + 1]);
+                if (s < min) {
+                    min = s;
+                }
+                swap(s[i], s[i + 1]);
+            }
+        }
+        return min;
+    }
+};
+
+Q2.
+class Solution {
+public:
+    ListNode* modifiedList(vector<int>& nums, ListNode* head) {
+        unordered_set<int> nums_set(nums.begin(), nums.end());
+        ListNode virtual_node(0);
+        virtual_node.next = head;
+        ListNode* current = &virtual_node;
+
+        while (current->next) {
+            if (nums_set.find(current->next->val) != nums_set.end()) {
+                current->next = current->next->next;
+            } else {
+                current = current->next;
+            }
+        }
+        
+        return virtual_node.next;
+    }
+};
+
+Q3.
+class Solution {
+public:
+    int minimumCost(int m, int n, vector<int>& horizontalCut, vector<int>& verticalCut) {
+        sort(horizontalCut.begin(),horizontalCut.end(),greater<int>());
+        sort(verticalCut.begin(),verticalCut.end(),greater<int>());
+
+    int row=0;
+    int col=0;
+    int hor=1;
+    int ver=1;
+    int total_cost=0;
+
+    while (row<horizontalCut.size() && col<verticalCut.size()) {
+        if (horizontalCut[row] >= verticalCut[col]) {
+            total_cost+=horizontalCut[row]*ver;
+            hor+=1;
+            row+=1;
+        } else {
+            total_cost+=verticalCut[col]*hor;
+            ver+=1;
+            col+=1;
+        }
+    }
+
+    while (row<horizontalCut.size()) {
+        total_cost+= horizontalCut[row]*ver;
+        row+= 1;
+    }
+
+    while (col<verticalCut.size()) {
+        total_cost+=verticalCut[col]*hor;
+        col+=1;
+    }
+
+    return total_cost;
+
+    }
+};
